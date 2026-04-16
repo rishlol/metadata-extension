@@ -42,6 +42,10 @@ JSON values are automatically pretty-printed.
 
 The **Open** button opens the current data as a fully styled standalone HTML page in a new tab.
 
+## Built with
+
+Developed using [Cursor](https://cursor.com) (AI-assisted IDE).
+
 ## Permissions
 
 | Permission | Why |

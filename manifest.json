@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "metadata",
+  "version": "1.0.0",
+  "description": "Inspect localStorage, sessionStorage, cookies, and cache for any website.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "metadata"
+  },
+  "permissions": ["cookies", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"]
+}

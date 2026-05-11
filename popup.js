@@ -60,9 +60,19 @@ function renderCacheList(entries) {
 function section(title, contentHtml) {
   return `
     <div class="section">
-      <div class="section-header">${title}</div>
-      ${contentHtml}
+      <button class="section-header"><span>${title}</span><span class="chevron">▾</span></button>
+      <div class="section-body">${contentHtml}</div>
     </div>`
+}
+
+function wireCollapsibles(root) {
+  root.addEventListener('click', e => {
+    const header = e.target.closest('.section-header')
+    if (!header) return
+    const body = header.nextElementSibling
+    const collapsed = body.classList.toggle('collapsed')
+    header.classList.toggle('collapsed', collapsed)
+  })
 }
 
 // Runs inside the active tab — reads storage and returns plain objects
@@ -125,8 +135,7 @@ async function init() {
     const cookiesString = section('Cookies', renderCookiesTable(cookies))
     const cacheAPIString = section('Cache API', renderCacheList(cacheEntries))
     const downloadButton = `
-      <div class="section">
-        <div class="section-header"></div>
+      <div class="section" style="padding: 14px 16px;">
         <button id="download-button">Open in New Tab</button>
       </div>
     `
@@ -135,9 +144,11 @@ async function init() {
       localStorageString +
       sessionStorageString +
       cookiesString +
-      cacheAPIString + 
+      cacheAPIString +
       downloadButton
-    
+
+    wireCollapsibles(contentEl)
+
     document.getElementById('download-button').addEventListener('click', async () => {
       const css = await fetch(chrome.runtime.getURL('popup.css')).then(r => r.text())
       const origin = originEl.textContent
@@ -149,16 +160,25 @@ async function init() {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>metadata — ${esc(origin)}</title>
           <style>
-            body { width: auto; max-height: none; margin: 0; }
-            main { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+            body { width: 100%; max-height: none; margin: 0; }
+            main { width: 100%; padding: 32px 24px; }
             ${css}
           </style>
         </head>
-        <body>
+        <body class="full-tab">
           <main>
             <div id="origin-bar"><span id="origin">${esc(origin)}</span></div>
             <div id="content">${localStorageString + sessionStorageString + cookiesString + cacheAPIString}</div>
           </main>
+          <script>
+            document.getElementById('content').addEventListener('click', function(e) {
+              var header = e.target.closest('.section-header');
+              if (!header) return;
+              var body = header.nextElementSibling;
+              var collapsed = body.classList.toggle('collapsed');
+              header.classList.toggle('collapsed', collapsed);
+            });
+          <\/script>
         </body>
         </html>`
 

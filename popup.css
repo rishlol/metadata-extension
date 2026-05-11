@@ -38,6 +38,11 @@ body {
   overflow-y: auto;
 }
 
+body.full-tab {
+  width: 100%;
+  max-height: none;
+}
+
 /* ── Origin bar ── */
 #origin-bar {
   position: sticky;
@@ -72,7 +77,6 @@ main {
 /* ── Section ── */
 .section {
   border-bottom: 1px solid var(--border);
-  padding: 14px 16px;
 }
 
 .section:last-child {
@@ -80,12 +84,41 @@ main {
 }
 
 .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-muted);
-  margin-bottom: 10px;
+}
+
+.section-header:hover {
+  color: var(--text);
+}
+
+.chevron {
+  font-size: 12px;
+  transition: transform 0.15s;
+}
+
+.section-header.collapsed .chevron {
+  transform: rotate(-90deg);
+}
+
+.section-body {
+  padding: 0 16px 14px;
+}
+
+.section-body.collapsed {
+  display: none;
 }
 
 /* ── Table ── */
